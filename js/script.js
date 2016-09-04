@@ -9,12 +9,10 @@ window.onload = function(){
 	canvas = document.getElementById('gameCanvas');
 	canvasContext = canvas.getContext('2d');
 	var framesPerSecond = 30;
-	setInterval(moveBallAndDrawOnCanvas, 1000 / framesPerSecond);
-}
-
-function moveBallAndDrawOnCanvas(){
-	moveBall();
-	drawOnCanvas();
+	setInterval(function(){
+		moveBall();
+		drawOnCanvas();
+	}, 1000 / framesPerSecond);
 }
 
 function moveBall(){
