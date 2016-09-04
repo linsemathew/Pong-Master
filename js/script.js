@@ -3,6 +3,7 @@
 var canvas;
 var canvasContext;
 var xCoordinate = 50;
+var backgroundColor = '#0E0024'
 
 window.onload = function(){
 	canvas = document.getElementById('gameCanvas');
@@ -21,7 +22,7 @@ function moveBall(){
 }
 
 function drawOnCanvas(){
-	canvasContext.fillStyle = '#0E0024';
+	canvasContext.fillStyle = backgroundColor;
 	canvasContext.fillRect(0,0,canvas.width,canvas.height);
 	canvasContext.fillStyle = 'white';
 	canvasContext.fillRect(5,100, 10, 75);
