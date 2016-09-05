@@ -12,12 +12,13 @@ const PADDLE_HEIGHT = 85;
 
 function mousePosition(event){
 	var rect = canvas.getBoundingClientRect();
-	var root = document.documentElement;
-	var mouseX = event.clientX - rect.left - root.scrollLeft;
-	var mouseY = event.clientY - rect.top - root.scrollTop;
+	var page = document.documentElement;
+	var mouseX = event.clientX - rect.left - page.scrollLeft;
+	var mouseY = event.clientY - rect.top - page.scrollTop;
+
 	return {
 		x: mouseX,
-		y: mouseY
+		y: mouseY 
 	};
 };
 
@@ -30,7 +31,13 @@ window.onload = function(){
 		moveBall();
 		drawOnCanvas();
 	}, 1000 / framesPerSecond);
-}
+
+	canvas.addEventListener('mousemove', 
+		function(event){
+			var mousePos = mousePosition(event);
+			leftPlayerPlayerY = mousePos.y - (PADDLE_HEIGHT / 2);
+	});
+};
 
 function moveBall(){
 	ballXCoordinate += ballXSpeed;
