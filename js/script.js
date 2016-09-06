@@ -1,5 +1,3 @@
-// var name = prompt("What is your name?")
-
 var canvas;
 var canvasContext;
 var ballXCoordinate;
@@ -7,9 +5,22 @@ var ballXSpeed = 5;
 var ballYCoordinate;
 var ballYSpeed = 5;
 var ballRadius = 10;
-var leftPlayerPlayerY = 250;
+var leftPlayerY = 250;
+var rightPlayerY = 250;
+var leftPlayerScore = 0;
+var rightPlayerScore = 0;
+const WINNING_SCORE = 3;
 const PADDLE_HEIGHT = 85;
 const PADDLE_WIDTH = 10;
+
+function computerMovement(){
+	var rightPlayerYCenter = rightPlayerY + (PADDLE_HEIGHT / 2)
+	if (ballYCoordinate - 35 <= rightPlayerYCenter){
+		rightPlayerY -= 5;
+	} else if (ballYCoordinate - 35 >= rightPlayerYCenter){
+		rightPlayerY += 5;
+	}
+};
 
 function mousePosition(event){
 	var rect = canvas.getBoundingClientRect();
@@ -33,32 +44,41 @@ window.onload = function(){
 
 	setInterval(function(){
 		moveBall();
+		computerMovement();
 		drawOnCanvas();
 	}, 1000 / framesPerSecond);
 
 	canvas.addEventListener('mousemove', 
 		function(event){
 			var mousePos = mousePosition(event);
-			leftPlayerPlayerY = mousePos.y - (PADDLE_HEIGHT / 2);
+			leftPlayerY = mousePos.y - (PADDLE_HEIGHT / 2);
 	});
 };
 
 function moveBall(){
-	ballXCoordinate -= ballXSpeed;
-	ballXSpeed += 0.01;
-	ballYCoordinate -= ballYSpeed;
-	ballYSpeed += 0.01;
-
-	if (ballYCoordinate < (leftPlayerPlayerY + PADDLE_HEIGHT) && ballYCoordinate > leftPlayerPlayerY && ballXCoordinate <= (5 +PADDLE_WIDTH + ballRadius){
+	ballXCoordinate += ballXSpeed;
+	ballYCoordinate += ballYSpeed;
+	// Left paddle hits the ball
+	if (ballYCoordinate < (leftPlayerY + PADDLE_HEIGHT) && ballYCoordinate > leftPlayerY && ballXCoordinate < 5 +PADDLE_WIDTH + ballRadius){
 		ballXSpeed *= -1;
-	} else if (ballXCoordinate >= (canvas.width - ballRadius){
+		var angle = ballYCoordinate - (leftPlayerY + (PADDLE_HEIGHT / 2))
+		ballYSpeed = angle * .33
+
+	// Right paddle hits the ball
+	} else if (ballYCoordinate < (rightPlayerY + PADDLE_HEIGHT) && ballYCoordinate > rightPlayerY && ballXCoordinate > (canvas.width - 5 - PADDLE_WIDTH - ballRadius)){
+		ballXSpeed *= -1;
+		var angle = ballYCoordinate - (rightPlayerY + (PADDLE_HEIGHT / 2))
+		ballYSpeed = angle * .33
+	} else if (ballXCoordinate >= canvas.width - ballRadius){
+		leftPlayerScore++;
 		resetBallPosition();
-	} else if (ballXCoordinate <= ballRadius){
+ 	} else if (ballXCoordinate <= ballRadius){
+		rightPlayerScore++;
 		resetBallPosition();
 	};
 
 	if (ballYCoordinate >= (canvas.height - ballRadius) || ballYCoordinate <= ballRadius){
-		ballYSpeed *= -1
+		ballYSpeed *= -1;
 	};
 }
 
@@ -67,19 +87,23 @@ function drawOnCanvas(){
 	makeRect(0, 0, canvas.width, canvas.height, '#0E0024');
 
 	// left player paddle
-	makeRect(5, leftPlayerPlayerY, PADDLE_WIDTH, PADDLE_HEIGHT, 'white');
+	makeRect(5, leftPlayerY, PADDLE_WIDTH, PADDLE_HEIGHT, 'white');
 
 	// right player paddle
 	makeRect((canvas.width - PADDLE_WIDTH - 5), rightPlayerY, PADDLE_WIDTH, PADDLE_HEIGHT, 'white');
 
 	// ball
 	makeBall(ballXCoordinate, ballYCoordinate, ballRadius, 'red');
+
+	canvasContext.fillText(rightPlayerScore, canvas.width - 100, 10)
+
+	canvasContext.fillText(leftPlayerScore, 100, 10)
 }
 
 function makeBall(xPosition, yPosition, radius, color){
 	canvasContext.fillStyle = color;
 	canvasContext.beginPath();
-	canvasContext.arc(xPosition, yPosition, radius, 0, Math.PI*2, true);
+	canvasContext.arc(xPosition, yPosition, radius, 0, Math.PI * 2, true);
 	canvasContext.fill();
 }
 
@@ -92,4 +116,5 @@ function resetBallPosition(){
 	ballYCoordinate = canvas.height / 2;
 	ballXCoordinate = canvas.width / 2;
 	ballXSpeed *= -1;
+	ballYSpeed = 5
 }
