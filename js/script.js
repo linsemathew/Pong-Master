@@ -1,6 +1,7 @@
 var canvas;
 var canvasContext;
 var ballXCoordinate;
+var rules;
 var ballXSpeed = 5;
 var ballYCoordinate;
 var ballYSpeed = 5;
@@ -19,15 +20,17 @@ function mouseClick(event){
 		leftPlayerScore = 0;
 		rightPlayerScore = 0;
 		winScreen = false;
-	};
+	} else if (rules){
+		rules = false;
+	}
 };
 
 function computerMovement(){
 	var rightPlayerYCenter = rightPlayerY + (PADDLE_HEIGHT / 2)
 	if (ballYCoordinate - 35 <= rightPlayerYCenter){
-		rightPlayerY -= 5;
+		rightPlayerY -= 6;
 	} else if (ballYCoordinate - 35 >= rightPlayerYCenter){
-		rightPlayerY += 5;
+		rightPlayerY += 6;
 	};
 };
 
@@ -44,6 +47,7 @@ function mousePosition(event){
 };
 
 window.onload = function(){
+	rules = true;
 	canvas = document.getElementById('gameCanvas');
 	canvasContext = canvas.getContext('2d');
 	ballXCoordinate = canvas.width / 2;
@@ -67,6 +71,10 @@ window.onload = function(){
 
 function moveBall(){
 	if (winScreen){
+		return 
+	}
+
+	if (rules){
 		return 
 	}
 
@@ -104,21 +112,42 @@ function drawNet(){
 	};
 };
 
+function noticeStyle(color, font, align){
+	canvasContext.fillStyle = color;
+	canvasContext.font = font;
+	canvasContext.textAlign = align;
+};
+
 function drawOnCanvas(){
 	// play area
 	makeRect(0, 0, canvas.width, canvas.height, '#0E0024');
-		if (winScreen){
-			canvasContext.fillStyle = 'white';
-			canvasContext.font = "17px Arial";
-			canvasContext.textAlign = "center"
-			if (leftPlayerScore >= WINNING_SCORE){
-				canvasContext.fillText("You won!", 400, 200);
-			} else if (rightPlayerScore >= WINNING_SCORE){
-				canvasContext.fillText("Computer wins!", 400, 200);
-			} 
-			canvasContext.fillText("Click to play again.", 400, 225);
+	
+	if (winScreen){
+		canvasContext.fillStyle = 'white';
+		canvasContext.font = '17px Arial';
+		canvasContext.textAlign = 'center';
+		if (leftPlayerScore >= WINNING_SCORE){
+			canvasContext.fillText("You won!", (canvas.width / 2), 200);
+		} else if (rightPlayerScore >= WINNING_SCORE){
+			canvasContext.fillText("Computer wins!", (canvas.width / 2), 200);
+		} 
+			canvasContext.fillText("Click to play again.", (canvas.width / 2), 225);
 			return
-		}
+		} 
+
+	if (rules){
+		canvasContext.fillStyle = 'white';
+		canvasContext.font = '18px Arial';
+		canvasContext.textAlign = 'center';
+		canvasContext.fillText("RULES", (canvas.width / 2), 85);
+		canvasContext.textAlign = 'right';
+		canvasContext.fillText("1. Move the paddle with your mouse.", (canvas.width / 2), 125);
+		canvasContext.fillText("2. First to score 3 wins.", (canvas.width / 2), 145);
+		canvasContext.fillText("3. You're on the left.", (canvas.width / 2), 165);
+		canvasContext.textAlign = 'center';
+		canvasContext.fillText("Click to play!", (canvas.width / 2), 205);
+		return
+	}
 
 	drawNet();
 
