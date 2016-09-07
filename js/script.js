@@ -108,14 +108,15 @@ function drawOnCanvas(){
 	// play area
 	makeRect(0, 0, canvas.width, canvas.height, '#0E0024');
 		if (winScreen){
-		canvasContext.fillStyle = 'white';
-			if (leftPlayerScore >= WINNING_SCORE){
-				canvasContext.fillText("You won!", 350, 200);
-			} else if (rightPlayerScore >= WINNING_SCORE){
-				canvasContext.fillText("Computer Wins!", 350, 200);
-			} 
 			canvasContext.fillStyle = 'white';
-			canvasContext.fillText("Game over! Click to continue.", 350, 500);
+			canvasContext.font = "17px Arial";
+			canvasContext.textAlign = "center"
+			if (leftPlayerScore >= WINNING_SCORE){
+				canvasContext.fillText("You won!", 400, 200);
+			} else if (rightPlayerScore >= WINNING_SCORE){
+				canvasContext.fillText("Computer wins!", 400, 200);
+			} 
+			canvasContext.fillText("Click to play again.", 400, 225);
 			return
 		}
 
@@ -129,10 +130,9 @@ function drawOnCanvas(){
 
 	// ball
 	makeBall(ballXCoordinate, ballYCoordinate, ballRadius, 'red');
-
-	canvasContext.fillText(rightPlayerScore, canvas.width - 100, 10)
-
-	canvasContext.fillText(leftPlayerScore, 100, 10)
+	canvasContext.font="15px Arial"
+	canvasContext.fillText("Score: " + rightPlayerScore, canvas.width - 100, 20)
+	canvasContext.fillText("Score: " + leftPlayerScore, 100, 20)
 }
 
 function makeBall(xPosition, yPosition, radius, color){
