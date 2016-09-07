@@ -140,7 +140,7 @@ function drawOnCanvas(){
 		canvasContext.font = '18px Arial';
 		canvasContext.textAlign = 'center';
 		canvasContext.fillText("RULES", (canvas.width / 2), 85);
-		canvasContext.textAlign = 'right';
+		canvasContext.textAlign = 'left';
 		canvasContext.fillText("1. Move the paddle with your mouse.", (canvas.width / 2), 125);
 		canvasContext.fillText("2. First to score 3 wins.", (canvas.width / 2), 145);
 		canvasContext.fillText("3. You're on the left.", (canvas.width / 2), 165);
