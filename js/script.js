@@ -67,15 +67,6 @@ window.onload = function(){
 
 function moveBall(){
 	if (winScreen){
-		if (leftPlayerScore >= WINNING_SCORE){
-			canvasContext.fillStyle = 'white';
-			canvasContext.fillText("You won!", 350, 200);
-		} else if (rightPlayerScore >= WINNING_SCORE){
-			canvasContext.fillStyle = 'white';
-			canvasContext.fillText("Computer Wins!", 350, 200);
-		} 
-		canvasContext.fillStyle = 'white';
-		canvasContext.fillText("Game over! Click to continue.", 350, 500);
 		return 
 	}
 
@@ -116,6 +107,17 @@ function drawNet(){
 function drawOnCanvas(){
 	// play area
 	makeRect(0, 0, canvas.width, canvas.height, '#0E0024');
+		if (winScreen){
+		canvasContext.fillStyle = 'white';
+			if (leftPlayerScore >= WINNING_SCORE){
+				canvasContext.fillText("You won!", 350, 200);
+			} else if (rightPlayerScore >= WINNING_SCORE){
+				canvasContext.fillText("Computer Wins!", 350, 200);
+			} 
+			canvasContext.fillStyle = 'white';
+			canvasContext.fillText("Game over! Click to continue.", 350, 500);
+			return
+		}
 
 	drawNet();
 
