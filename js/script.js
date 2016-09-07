@@ -108,8 +108,8 @@ function moveBall(){
 }
 
 function drawNet(){
-	for(var i=10; i < canvas.height; i++){
-		makeRect((canvas.width / 2)- 1, i, 2, 20, 'white')
+	for(var i=10; i < canvas.height; i+=20){
+		makeRect((canvas.width / 2)- 1, i, 2, 5, 'white')
 	};
 };
 
