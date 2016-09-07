@@ -9,9 +9,18 @@ var leftPlayerY = 250;
 var rightPlayerY = 250;
 var leftPlayerScore = 0;
 var rightPlayerScore = 0;
+var winScreen = false;
 const WINNING_SCORE = 3;
 const PADDLE_HEIGHT = 85;
 const PADDLE_WIDTH = 10;
+
+function mouseClick(event){
+	if(winScreen){
+		leftPlayerScore = 0;
+		rightPlayerScore = 0;
+		winScreen = false;
+	};
+};
 
 function computerMovement(){
 	var rightPlayerYCenter = rightPlayerY + (PADDLE_HEIGHT / 2)
@@ -19,7 +28,7 @@ function computerMovement(){
 		rightPlayerY -= 5;
 	} else if (ballYCoordinate - 35 >= rightPlayerYCenter){
 		rightPlayerY += 5;
-	}
+	};
 };
 
 function mousePosition(event){
@@ -44,9 +53,10 @@ window.onload = function(){
 
 	setInterval(function(){
 		moveBall();
-		computerMovement();
 		drawOnCanvas();
 	}, 1000 / framesPerSecond);
+
+	canvas.addEventListener('mousedown', mouseClick);
 
 	canvas.addEventListener('mousemove', 
 		function(event){
@@ -56,6 +66,21 @@ window.onload = function(){
 };
 
 function moveBall(){
+	if (winScreen){
+		if (leftPlayerScore >= WINNING_SCORE){
+			canvasContext.fillStyle = 'white';
+			canvasContext.fillText("You won!", 350, 200);
+		} else if (rightPlayerScore >= WINNING_SCORE){
+			canvasContext.fillStyle = 'white';
+			canvasContext.fillText("Computer Wins!", 350, 200);
+		} 
+		canvasContext.fillStyle = 'white';
+		canvasContext.fillText("Game over! Click to continue.", 350, 500);
+		return 
+	}
+
+	computerMovement();
+
 	ballXCoordinate += ballXSpeed;
 	ballYCoordinate += ballYSpeed;
 	// Left paddle hits the ball
@@ -82,9 +107,17 @@ function moveBall(){
 	};
 }
 
+function drawNet(){
+	for(var i=10; i < canvas.height; i++){
+		makeRect((canvas.width / 2)- 1, i, 2, 20, 'white')
+	};
+};
+
 function drawOnCanvas(){
 	// play area
 	makeRect(0, 0, canvas.width, canvas.height, '#0E0024');
+
+	drawNet();
 
 	// left player paddle
 	makeRect(5, leftPlayerY, PADDLE_WIDTH, PADDLE_HEIGHT, 'white');
@@ -113,6 +146,9 @@ function makeRect(xPosition, yPosition, width, height, color){
 }
 
 function resetBallPosition(){
+	if (leftPlayerScore >= WINNING_SCORE || rightPlayerScore >= WINNING_SCORE){
+		winScreen = true; 
+	}
 	ballYCoordinate = canvas.height / 2;
 	ballXCoordinate = canvas.width / 2;
 	ballXSpeed *= -1;
